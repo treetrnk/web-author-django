@@ -3,9 +3,17 @@ from django.contrib.auth.models import User
 from autoslug import AutoSlugField
 
 class Page(models.Model):
+    TEMPLATE_CHOICES = [
+        ('page', 'Page'),
+        ('blog', 'Blog'),
+        ('post', 'Post'),
+        ('story', 'Story'),
+        ('chapter', 'Chapter'),
+    ]
     title = models.CharField(max_length=200)
     slug = AutoSlugField(null=True, populate_from='title')
-    parent = models.ForeignKey('self', on_delete=models.PROTECT, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True)
+    template = models.CharField(max_length=100, choices=TEMPLATE_CHOICES)
     banner = models.CharField(max_length=1000, blank=True)
     tags = models.CharField(max_length=1000, blank=True)
     sidebar = models.TextField(blank=True)
