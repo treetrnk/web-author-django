@@ -3,6 +3,14 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from autoslug import AutoSlugField
 
+def recursive_parents(page):
+    parents = []
+    parents.append(page)
+    if page.parent:
+        parents.append(recursive_parents(page.parent))
+
+    return parents
+
 class Page(models.Model):
     TEMPLATE_CHOICES = [
         ('page', 'Page'),
@@ -34,3 +42,11 @@ class Page(models.Model):
 
     def children(self):
         return Page.objects.filter(parent=self, pub_date__lte=timezone.now())
+
+    def all_parents(self):
+        if self.parent:
+            return recursive_parents(self.parent)
+        else:
+            return False
+
+
