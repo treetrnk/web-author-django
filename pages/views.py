@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.utils import timezone
 from .models import Page
 
 def index(request):
@@ -11,7 +12,9 @@ def search(request):
     context = {'page': page}
     return render(request, 'pages/' + page.template + '.html', context)
 
-def page(request, parent_location='', slug=''):
-    page = Page.objects.get(slug=slug)
-    context = {'page': page}
+def page(request, location=''):
+    location = location.split('/')
+    page = Page.objects.get(slug=location[-1])
+    children = Page.objects.filter(parent = page, pub_date__lte=timezone.now())
+    context = {'page': page, 'children': children}
     return render(request, 'pages/' + page.template + '.html', context)

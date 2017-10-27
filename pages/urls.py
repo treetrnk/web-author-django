@@ -5,5 +5,5 @@ appname = 'pages'
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^search/', views.search, name='search'),
-    url(r'^(?P<parent_location>\S*/)(?P<slug>\S+/)$', views.page, name='page'),
+    url(r'^(?P<location>.*)/$', views.page, name='page'),
 ]
