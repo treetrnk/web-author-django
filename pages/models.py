@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
 from autoslug import AutoSlugField
 
@@ -30,3 +31,6 @@ class Page(models.Model):
         if not change:
             obj.author = request.user
         obj.save()
+
+    def children(self):
+        return Page.objects.filter(parent=self, pub_date__lte=timezone.now())
