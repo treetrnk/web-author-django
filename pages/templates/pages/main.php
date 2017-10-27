@@ -1,44 +1,43 @@
 <!DOCTYPE html>
-{% load static %}
-<html lang='en'>
+<html>
 	<head>
-		<title>{{ page.title }} - Nathan Hare</title>
+  <title><?=$page->titlePrefix.$page->title;?> - Nathan Hare</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<meta name="description" content="{{ page.body }}" />
+    <meta name="description" content=<?="'$page->description'";?> />
 
     <!-- Schema.org markup for Google+ -->
-		<meta itemprop="name" content="{{ page.title }}">
-		<meta itemprop="description" content="{{ page.body }}">
-		<meta itemprop="image" content="{{ page.banner }}">
+    <meta itemprop="name" content=<?="'$page->title'";?>>
+    <meta itemprop="description" content=<?="'$page->description'"?>>
+    <meta itemprop="image" content=<?="'$page->banner'";?>>
 
     <!-- Twitter Card data -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@treetrnk">
-		<meta name="twitter:title" content="{{ page.title }}">
-		<meta name="twitter:description" content="{{ page.body }}">
+    <meta name="twitter:title" content=<?="'$page->title'";?>>
+    <meta name="twitter:description" content=<?="'$page->description'";?>>
     <meta name="twitter:creator" content="@treetrnk">
     <!-- Twitter summary card with large image must be at least 280x150px -->
-		<meta name="twitter:image:src" content="{{ page.banner }}">
+    <meta name="twitter:image:src" content=<?="'$page->banner'";?>>
 
     <!-- Open Graph data -->
-		<meta property="og:title" content="{{ page.title }}" />
+    <meta property="og:title" content=<?="'$page->title'";?> />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="http://nathanhare.net" />
-		<meta property="og:image" content="{{ page.banner }}" />
-		<meta property="og:description" content="{{ page.body }}" />
+    <meta property="og:url" content=<?="'http://nathanhare.net$page->location'";?> />
+    <meta property="og:image" content=<?="'$page->banner'";?> />
+    <meta property="og:description" content=<?="'$page->description'";?> />
     <meta property="og:site_name" content="The Writings of Nathan Hare" />
-		<meta property="article:published_time" content="{{ page.pub_date }}" />
-		<meta property="article:modified_time" content="{{ page.pub_date }}" />
-		<meta property="article:section" content="{{ page.parent.title }}" />
-		<meta property="article:tag" content="{{ page.tags }}" />
+    <meta property="article:published_time" content=<?="'$page->time'";?> />
+    <meta property="article:modified_time" content=<?="'$page->time'";?> />
+    <meta property="article:section" content="<?=$page->section?>" />
+    <meta property="article:tag" content=<?="'$page->tags'";?> />
     <meta property="fb:admins" content="Facebook numberic ID" />
 
     <link rel="shortcut icon" href="/resources/images/favicon2.png" type="image/x-icon">
-		<link href="{% static 'pages/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+		<link href="/resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <!---<script src="https://use.fontawesome.com/0dabb168cf.js"></script>--->
 
-		<link rel="stylesheet" href="{% static 'pages/css/main.css' %}" />
+    <?php include "/srv/http/writing/resources/css/css.php" ?>
 
 	</head>
 	<body>
@@ -58,7 +57,7 @@
 						<i class="glyphicon glyphicon-menu-hamburger nav-menu hidden-lg hidden-md"></i>
 						<ul class="navlinks hidden-sm hidden-xs">
               <li><a href="#" data-toggle="modal" data-target="#searchMod" id="searchbtn"> &nbsp;&nbsp; <i class="glyphicon glyphicon-search"></i> &nbsp;&nbsp; </a></li>
-							{# topnav #}
+              <?=getTopNav();?>
 
             </ul>
 					</nav>
@@ -79,20 +78,22 @@
         </div>
       </form>
 			<ul>
-				{# sidenav #}
+        <?=getSideNav();?>
 			</ul>
 		</nav>
 
+    <?php //if ($page->type != 'page') { ?>
 		<div class="jumbotron banner">
 			<div class="container">
 				<br /><br /><br /><br />
-				{% if page.parent %}
-					<h1>{{ page.parent.title }}</h1>
-				{% endif %}
+        <?=$page->booktitle;?>
         <!--
         -->
 			</div>
     </div>
+    <?php /*} else { ?>
+    <div class='spacer'>&nbsp;</div>
+    <?php }*/ ?>
 
 		<!-- Modal -->
 		<div class="modal fade" id="searchMod" tabindex="-1" role="dialog" aria-labelledby="searchModLabel">
@@ -106,7 +107,7 @@
 									<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i></button>
 								</span>
 							</div>
-							{# getAllTags #}
+              <?=getAllTags();?>
 						</form>
 					</div>
 				</div>
@@ -147,8 +148,8 @@
 							<div class="row">
 								<div class="col-xs-12">
 									<small><label class="control-label">&nbsp;</label></small>
-									<div class="coinhive-captcha" data-hashes="512" data-key="{# config('coinhive-public') #}">
-										<div class="g-recaptcha" data-sitekey="{# config('google-public') #}"></div>
+                  <div class="coinhive-captcha" data-hashes="512" data-key="<?=config('coinhive-public');?>">
+                    <div class="g-recaptcha" data-sitekey="<?=config('google-public');?>"></div>
                   </div>
 								</div>
 							</div>
@@ -167,15 +168,18 @@
     <button type="button" class="btn btn-primary" id="sub-btn" data-toggle="modal" data-target="#subscribeMod" title="Subscribe"><i class="glyphicon glyphicon-envelope"></i><span class="hidden-xs"> Subscribe</span></button>
 
 		<section class="container content-wrapper">
-			{# $page->breadcrumbs() #}
+      <?=$page->breadcrumbs();?>
 
-			<!--
-			<div class='alert alert-danger' role='alert'><b>Error!</b> $error</div>
-			<div class='alert alert-success' role='alert'><b>Success! </b>$success</div>
-			-->
+      <?php 
+        if (!empty($error)) {
+          echo "<div class='alert alert-danger' role='alert'><b>Error!</b> $error</div>";
+        } elseif (!empty($success)) {
+          echo "<div class='alert alert-success' role='alert'><b>Success! </b>$success</div>";
+        }
 
-			{% block content %}
-			{% endblock %}
+        include "$page->type.php";
+
+      ?>
 
     </section>
 
@@ -198,7 +202,7 @@
     <script src="https://coinhive.com/lib/captcha.min.js" async></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
 		<!-- Latest compiled and minified JavaScript -->
-		<script src="https://nathanhare.net/resources/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src="/resources/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<!--<script src="http://code.jquery.com/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>-->
     <script type="text/javascript">
@@ -267,7 +271,7 @@
 				  $('[data-toggle="tooltip"]').tooltip()
 				})
 
-				var postType = "{{ page.template }}";
+        var postType = "<?=$page->type;?>";
   
         if (postType == "chapter" || postType == "post") {
           readProgress();
