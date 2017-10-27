@@ -1,43 +1,48 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+{% load static %}
 <div class="row">
   <div class="col-md-7 col-md-offset-1 col-sm-12 col-xs-12 content">
     
-    <h1><?=$page->title;?></h1>
+    <h1>{{ page.title }}</h1>
     <p class="pull-right text-muted" id="theme-select">
       <small class="hidden-xs">Theme:</small>
       <small>
         <a href="?theme=light" id="light-theme" title="Light Theme">
-          <img src="/resources/images/light-theme.png" />
+          <img src="{% static 'pages/images/light-theme.png' %}" />
         </a>
         <a href="?theme=dark" id="dark-theme" title="Dark Theme">
-          <img src="/resources/images/dark-theme.png" />
+          <img src="{% static 'pages/images/dark-theme.png' %}" />
         </a>
       </small>
     </p>
-    <p class="text-muted"><small><?=$page->date;?></small></p>
+    <p class="text-muted"><small>{{ page.pub_date }}</small></p>
     <div class="content">
-      <?=$page->formattedBody;?>
+			{{ page.body|safe }}
     </div>
   
     <br /><br />
     <div class="row">
       <div class="col-sm-6 col-xs-12">
-        <?=$page->tags();?>
+				{{ page.tags }}
       </div>
       <div class="col-sm-6 col-xs-12 text-right share-btns">
         <small class="text-muted">Share:</small>
-        <?=getShareButtons($page->url);?>
+        {# getShareButtons($page->url) #}
       </div>
     </div><br />
     <nav aria-label="...">
       <ul class="pager">
 <!--
-        <?=$page->nextPrev();?> 
+				{# <?=$page->nextPrev();?> #}
 -->
       </ul>
     </nav>
   </div>
   <aside class="col-md-3 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
-    <?php $page->tableOfContents(); ?>
+		{# include tableOfContents #}
+		{{ page.sidebar|safe }}
   </aside>
 </div>
 <div class="row">
@@ -52,8 +57,8 @@
     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
     
     var disqus_config = function () {
-      this.page.url = <?="'http://nathanhare.net$page->location'";?>;  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "<?=$page->id;?>"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "{{ page.slug }}";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "{{ page.pk }}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 
     (function() { // DON'T EDIT BELOW THIS LINE
@@ -68,4 +73,4 @@
                             
   </div>
 </div>
-
+{% endblock %}
