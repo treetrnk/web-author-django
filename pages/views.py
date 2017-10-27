@@ -2,13 +2,16 @@ from django.shortcuts import render
 from .models import Page
 
 def index(request):
-    home = Page.objects.get(slug='home')
-    return render(request, 'pages/' + home.template + '.html', home)
+    page = Page.objects.get(slug='home')
+    context = {'page': page}
+    return render(request, 'pages/' + page.template + '.html', context)
 
 def search(request):
-    search = Page.objects.get(slug='home')
-    return render(request, 'pages/' + home.template + '.html', home)
+    page = Page.objects.get(slug='home')
+    context = {'page': page}
+    return render(request, 'pages/' + page.template + '.html', context)
 
 def page(request, parent_location='', slug=''):
     page = Page.objects.get(slug=slug)
-    return render(request, 'pages/' + page.template + '.html', page)
+    context = {'page': page}
+    return render(request, 'pages/' + page.template + '.html', context)
