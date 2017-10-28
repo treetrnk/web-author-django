@@ -66,7 +66,7 @@
 			</div>
 		</header>
     <nav class="toggle-nav" id="toggle-nav">
-      <form action="/search/" method="get"> 
+      <form action="/search/" method="get">
         <div class="row">
           <div class="col-xs-12">
             <div class="input-group" id="searchtoggle">
@@ -86,9 +86,7 @@
 		<div class="jumbotron banner">
 			<div class="container">
 				<br /><br /><br /><br />
-				{% if page.parent %}
-					<h1>{{ page.parent.title }}</h1>
-				{% endif %}
+				{{ page.show_story_title|safe }}
         <!--
         -->
 			</div>
@@ -167,6 +165,14 @@
     <button type="button" class="btn btn-primary" id="sub-btn" data-toggle="modal" data-target="#subscribeMod" title="Subscribe"><i class="glyphicon glyphicon-envelope"></i><span class="hidden-xs"> Subscribe</span></button>
 
 		<section class="container content-wrapper">
+			{% if page.parent %}
+				<ol class="breadcrumb">
+					{% for parent in page.all_parents %}
+						<li><a href="{{ parent.slug }}">{{ parent.title }}</a></li>
+					{% endfor %}
+						<li class="active">{{ page.title }}</li>
+				</ol>
+			{% endif %}
 			{# $page->breadcrumbs() #}
 
 			<!--
@@ -182,9 +188,9 @@
 		<footer class="text-muted small">
 			<p class="text-center">&#169; Copyright 2017, Nathan Hare</a>
       <p class="text-center">
-        "<a href="http://www.newgrounds.com/art/view/llamareaper/fantasy-landscape-2" target="_blank">Fantasy Landscape</a>" 
+        "<a href="http://www.newgrounds.com/art/view/llamareaper/fantasy-landscape-2" target="_blank">Fantasy Landscape</a>"
         and "<a href="http://www.newgrounds.com/art/view/llamareaper/pumpkinbutts" target="_blank">Pumpkinbutts.</a>"
-        by <a href="http://atthespeedof.newgrounds.com/" target="_blank">Jason Coates</a> are licensed under 
+        by <a href="http://atthespeedof.newgrounds.com/" target="_blank">Jason Coates</a> are licensed under
         <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">CC BY-NC-SA 3.0</a>
         and <a href="https://creativecommons.org/licenses/by-nc/3.0/" target="_blank">CC BY-NC 3.0</a>, respectively
       </p>
@@ -198,7 +204,7 @@
     <script src="https://coinhive.com/lib/captcha.min.js" async></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
 		<!-- Latest compiled and minified JavaScript -->
-		<script src="https://nathanhare.net/resources/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src="{% static 'pages/js/bootstrap.min.js' %}" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<!--<script src="http://code.jquery.com/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>-->
     <script type="text/javascript">
@@ -238,7 +244,7 @@
 				});
 
         $("#searchMod").on("shown.bs.modal", function() {
-          $("#searchInput").focus(); 
+          $("#searchInput").focus();
         });
 
         $(document).on('keydown', function(e) {
@@ -268,7 +274,7 @@
 				})
 
 				var postType = "{{ page.template }}";
-  
+
         if (postType == "chapter" || postType == "post") {
           readProgress();
 
@@ -293,7 +299,7 @@
            */
 
 			});
-        
+
 			function readProgress() {
 				var contentPos = $(".content").position().top;
 				var contentSize = $(".content").height();
